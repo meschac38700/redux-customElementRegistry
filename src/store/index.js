@@ -1,9 +1,10 @@
 import {createStore} from "redux";
-import { USER } from "./mutation-types.js";
 
-const reducer = (state = [], action) => {
-  if(action.type === USER.ADD_USER)
-   return [...state, action.payload];
+const reducer = (state = { users: []}, action) => {
+  /*if(action.type === USER.ADD_USER){
+    const nextID = (state.users.at(-1)?.id??0) + 1;
+    return {...state, users: [...state.users, {id: nextID, name: action.payload}]};
+  }*/
   return state;
 };
 
