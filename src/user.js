@@ -1,15 +1,18 @@
 import UserActions from "store/user/actions.js";
 import store from "store/user/index.js";
 import UserActionTypes from "store/user/actionTypes";
+import UserItem from "components/user/UserItem";
 
-const userInput = document.querySelector(".user-input");
-const submitButton = document.querySelector(".user-button");
+const userInput = document.getElementById("user-input");
+const userDescription = document.getElementById("user-description");
+const submitButton = document.getElementById("user-button");
 
 
 submitButton.addEventListener("click", () => {
   const name = userInput.value.trim();
-  if(name !== ""){
-    UserActions.ADD_USER(name);
+  const description = userDescription.value.trim();
+  if(!!name.length && !!description.length){
+    UserActions.ADD_USER({name, description});
   }
 });
 
@@ -28,12 +31,7 @@ function updateAddUserDOM(users){
   const userListDOM = document.querySelector(".user-list");
   users.forEach( user => {
     if(!user.dom){
-      const li = document.createElement("LI");
-      li.setAttribute("class", "user-item");
-      li.setAttribute("id", `user-${user.id}`);
-      li.setAttribute("key", `user-${user.id}`);
-      li.innerText = user.name;
-      userListDOM.appendChild(li);
+      userListDOM.appendChild(new UserItem(`${user.name}-${user.id}`, user))
       UserActions.USER_ADD_IN_DOM(user.id);
     }
   })
@@ -44,5 +42,5 @@ function updateAddUserDOM(users){
 
 
 // Let"s add some users
-UserActions.ADD_USER("Jack");
-UserActions.ADD_USER("Derick");
+UserActions.ADD_USER({name: "Jack", description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."});
+UserActions.ADD_USER({name:"Derick", description: "The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from 'de Finibus Bonorum et Malorum' by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham."});

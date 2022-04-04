@@ -1,9 +1,15 @@
 export default {
-  ADD: (state, name) => {
+  /**
+   * 
+   * @param {Object} state users
+   * @param {Object} user {name: string, description: string}
+   * @returns {Object} new state
+   */
+  ADD: (state, user) => {
     const users = [ ...(state.users??[])];
     const nextID = (users.at(-1)?.id??0) + 1;
 
-    return {...state, users: [ ...users, {id: nextID, name: name} ] };
+    return {...state, users: [ ...users, {id: nextID, ...user } ] };
   },
   DOM: (state, userId) => {
     // set dom attr to true
