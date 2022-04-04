@@ -3,10 +3,13 @@ const path = require('path');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: [ "./src/main.js", "./src/user.js"],
+  entry:{
+    main: "./src/main.js",
+    user: "./src/user.js"
+  },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: "main.js",
+    filename: "[name]-[contenthash].js",
   },
   mode: "development",
   module: {
@@ -37,6 +40,9 @@ module.exports = {
   devServer: {
     static: path.join(__dirname, 'dist'),
     watchFiles: path.join(__dirname, 'dist'),
+    port: 8080,
+    hot: true,
+    compress: true
   },
   plugins: [
     new HtmlWebpackPlugin({
