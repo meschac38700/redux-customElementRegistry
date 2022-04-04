@@ -4,8 +4,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry:{
-    main: "./src/main.js",
-    user: "./src/user.js"
+    main: "main.js",
+    user: "user.js"
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -38,8 +38,8 @@ module.exports = {
     ]
   },
   devServer: {
-    static: path.join(__dirname, 'dist'),
-    watchFiles: path.join(__dirname, 'dist'),
+    static: path.join(__dirname, 'src'),
+    watchFiles: path.join(__dirname, 'src'),
     port: 8080,
     hot: true,
     compress: true
@@ -50,6 +50,13 @@ module.exports = {
       filename: "index.html",
       template: "src/index.html"
     })
-  ]
+  ],
+  resolve: {
+    modules: [
+      path.join(__dirname, 'src'),
+      path.join(__dirname, 'node_modules')
+    ],
+    extensions: ['', '.js', 'jsx', '.ts']
+  }
 
 }
