@@ -1,7 +1,9 @@
 export default {
   ADD: (state, name) => {
-    const nextID = (state.users.at(-1)?.id??0) + 1;
-    return {...state, users: [ ...state.users, {id: nextID, name: name} ] };
+    const users = [ ...(state.users??[])];
+    const nextID = (users.at(-1)?.id??0) + 1;
+
+    return {...state, users: [ ...users, {id: nextID, name: name} ] };
   },
   DOM: (state, userId) => {
     // set dom attr to true

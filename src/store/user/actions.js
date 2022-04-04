@@ -1,5 +1,5 @@
-import store from "./index.js";
-import ActionTypes from "./types.js";
+import store from "store/user";
+import ActionTypes from "store/user/actionTypes";
 export default {
   ADD_USER: (name) => {
     store.dispatch({type: ActionTypes.ADD_USER, payload: name});

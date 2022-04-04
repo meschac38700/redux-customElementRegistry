@@ -1,15 +1,22 @@
-import {createStore} from "redux";
-import userState from "./state.js";
-import Mutations from "./mutations.js";
-import ActionTypes from "./types.js";
+import {combineReducers, createStore} from "redux";
+import globalReducer from "store/global/index";
+import userState from "store/user/state";
+import Mutations from "store/user/mutations";
+import ActionTypes from "store/user/actionTypes";
 
-const reducer = (state=userState, action) => {
+function lastAction(state = null, action) {
+  return action;
+}
+
+function reducer (state=userState, action) {
   switch (action.type) {
     case ActionTypes.ADD_USER:
       return Mutations.ADD(state, action.payload);
     case ActionTypes.SET_DOM:
       return Mutations.DOM(state, action.payload);
+    default:
+      return state;
   }
 }
-
-export default createStore(reducer);
+const userAndGlobalReducers = combineReducers({user:reducer, lastAction: globalReducer}) ;
+export default createStore(userAndGlobalReducers);
