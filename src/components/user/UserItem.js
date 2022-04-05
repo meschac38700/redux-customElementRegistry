@@ -1,6 +1,6 @@
 import UserDetails from "components/user/UserDetails";
 
-export default class UserItem extends HTMLLIElement{
+export default class UserItem extends HTMLElement{
 
   static get observedAttributes() {
     return ['showDetails', 'user', 'key'];
@@ -13,6 +13,8 @@ export default class UserItem extends HTMLLIElement{
    */
   constructor(key, user){
     super();
+    this.attachShadow({mode: "open"});
+
     this.key = `${key}-${new Date().getTime()}`;
     this.user = {...user};
     this.showDetails = false;
@@ -21,10 +23,32 @@ export default class UserItem extends HTMLLIElement{
     this.link = this._createLink();
   }
 
+  get _styles(){
+    const style = document.createElement("style");
+    style.textContent = `
+      *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      a{
+        color: inherit;
+        text-decoration: none;
+      }
+      .user-item{
+        position: relative;
+        background-color: #fefefe;
+        color: rgb(16, 82, 136);
+        text-transform: uppercase;
+      }
+    `;
+    return style;
+  }
+
   connectedCallback(){
     this.render();
   }
-  
+
   /**
    * TODO unused
    * @param {string} name changed attribute name
@@ -52,19 +76,22 @@ export default class UserItem extends HTMLLIElement{
    * Render the current customElement into DOM
    */
   render(){
+    const div = document.createElement("div");
     const classes = ["user-item" /*, this.showDetails? "details-opened": ""*/];
-    this.setAttribute("class", classes.join(" "));
-    this.setAttribute("id", `user-${this.user.id}`);
-    this.appendChild(this.link);
+    div.setAttribute("class", classes.join(" "));
+    div.setAttribute("id", `user-${this.user.id}`);
+    div.appendChild(this.link);
+    this.shadowRoot.appendChild(this._styles);
+    this.shadowRoot.appendChild(div);
     this._addDetails();
   }
 
   /**
    * user details infos
    */
-   _addDetails(){
+  _addDetails(){
     if(this.showDetails){
-      this.appendChild(this.details);
+      this.shadowRoot.appendChild(this.details);
     }
     else{
       this.details.remove();
@@ -79,19 +106,20 @@ export default class UserItem extends HTMLLIElement{
     
     link.setAttribute("href", "#");
     link.setAttribute("class", "user-link");
-    
+    link.addEventListener("click", (e) =>{
+      e.preventDefault();
+      e.stopPropagation();
+      this.showDetails = !this.showDetails;
+      this._addDetails();
+    });
     link.onblur = () => {
       this.showDetails = false;
       this._addDetails();
     };
-    link.addEventListener("focusin", (e) => {
-      this.showDetails = true;
-      this._addDetails();
-    });
     link.innerText = this.user.name;
     return link;
   }
 
 }
 
-customElements.define("user-item", UserItem, {extends: "li"});
+customElements.define("user-item", UserItem);

@@ -1,15 +1,53 @@
-export default class UserDetails extends HTMLDivElement {
+export default class UserDetails extends HTMLElement {
   /**
    * 
    * @param {Object} user contains at least {name: string, description: string}
    */
   constructor(user){
     super();
+
+    this.attachShadow({mode: 'open'});
     this.user = {...user};
   }
 
 
+  get _styles(){
+    const style = document.createElement("STYLE");
+    const currentClass = this.getAttribute("class");
+    style.textContent = `
+      *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .details-wrapper{
+        position: relative;
+      }
+      .user-details{
+        position: absolute;
+        bottom: 0;
+        transform: translateY(100%);
+        z-index: 9;
+        color: #4a4a4a;
+        background-color: #f2f3f7;
+        padding: .8em;
+        border-radius: .4em;
+        box-shadow: 0 4px 8px #dddcdc;
+        text-transform: none;
+        display: flex;
+        flex-direction: column;
+        gap: 1em 0;
+        cursor: default;
+      }
+    `;
+    return style;
+  }
+
+
   render(){
+    const wrapper = document.createElement("DIV");
+    wrapper.setAttribute("class", "details-wrapper");
+    const div = document.createElement("DIV");
     const title = document.createElement("H4");
     title.setAttribute("class", "title user-name");
     title.setAttribute("id", `${this.user.id}-${this.user.name}-title`);
@@ -19,10 +57,12 @@ export default class UserDetails extends HTMLDivElement {
     description.setAttribute("id", `${this.user.id}-${this.user.name}-description`);
     description.innerText = this.user.description;
 
-    this.setAttribute("class", "user-details");
-    this.appendChild(title);
-    this.appendChild(description);
-
+    div.setAttribute("class", "user-details");
+    div.appendChild(title);
+    div.appendChild(description);
+    wrapper.appendChild(div);
+    this.shadowRoot.appendChild(this._styles);
+    this.shadowRoot.appendChild(wrapper);
   }
 
   clickHandler(){
@@ -44,4 +84,4 @@ export default class UserDetails extends HTMLDivElement {
 
 }
 
-customElements.define("user-details", UserDetails, {extends: 'div'});
+customElements.define("user-details", UserDetails);
