@@ -11,11 +11,11 @@ export default class UserItem extends HTMLElement{
    * @param {string} key element unique identifier
    * @param {Object} user object that contains at least {name: string}
    */
-  constructor(key, user){
+  constructor(user){
     super();
     this.attachShadow({mode: "open"});
 
-    this.key = `${key}-${new Date().getTime()}`;
+    this.key = `${user.name}-${user.id}-${new Date().getTime()}`;
     this.user = {...user};
     this.showDetails = false;
     this.details = new UserDetails(this.user);

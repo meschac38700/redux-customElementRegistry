@@ -1,12 +1,12 @@
 import UserActions from "store/user/actions.js";
 import store from "store/user/index.js";
 import UserActionTypes from "store/user/actionTypes";
-import UserItem from "components/user/UserItem";
+import UserList from "components/user/UserList";
 
 const userInput = document.getElementById("user-input");
 const userDescription = document.getElementById("user-description");
 const submitButton = document.getElementById("user-button");
-
+const userList = new UserList();
 
 submitButton.addEventListener("click", () => {
   const name = userInput.value.trim();
@@ -18,28 +18,16 @@ submitButton.addEventListener("click", () => {
 
 // Subscribe to the user store
 store.subscribe(() => {
-  // not re-render the all list but render the only new added user (update dom)
-  const userNotInDomYet = store.getState().user.users.filter(user => !user.dom);
+  const users = store.getState().user.users;
   const lastAction = store.getState().lastAction;
-  if(lastAction === UserActionTypes.ADD_USER && userNotInDomYet.length){
-    updateAddUserDOM(userNotInDomYet);
+
+  if(lastAction === UserActionTypes.ADD_USER && users.length){
+    userList.appendUsers(users);
   }
 });
 
-
-function updateAddUserDOM(users){
-  const userListDOM = document.querySelector(".user-list");
-  users.forEach( user => {
-    if(!user.dom){
-      userListDOM.appendChild(new UserItem(`${user.name}-${user.id}`, user))
-      UserActions.USER_ADD_IN_DOM(user.id);
-    }
-  })
-  // patch dom not all users
-
-}
-
-
+// Inject user list
+document.getElementById("inject-user-list").appendChild(userList);
 
 // Let"s add some users
 UserActions.ADD_USER({name: "Jack", description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."});
