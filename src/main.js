@@ -1,3 +1,4 @@
+import "assets/scss/main.scss";
 // import store from "./store/index.js";
 
 // console.log(store);

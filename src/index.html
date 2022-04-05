@@ -5,70 +5,19 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Redux</title>
-
-  <style>
-    *, *:before, *:after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      color: rgb(70, 69, 69);
-    }
-    .container,
-    .field-group{
-      width: 600px;
-      max-width: calc(100% - 2rem);
-      margin: 0 auto;
-      padding: 1rem 0;
-      display: flex;
-      flex-direction: column;
-      gap: .8rem;
-    }
-    .field-group{
-      gap: .2rem;
-      width: 100%;
-      max-width: 100%;
-      padding: 0;
-      margin: 0;
-    }
-    .label{
-      font-weight: 600px;
-    }
-    .user-description,
-    .user-input,
-    .user-button{
-      padding: .4em;
-      outline: none;
-      border: 1px solid #cecece;
-      border-radius: .2em;
-    }
-    .user-button{
-      background-color: rgb(46, 138, 138);
-      color: white;
-      font-weight: 600;
-      align-self: center;
-      padding: .6em 2em;
-      border: none;
-      border-radius: .4em;
-      cursor: pointer;
-      transition: background-color .3s ease-in-out;
-    }
-    .user-button:hover{
-      background-color: rgb(25, 73, 73);
-    }
-  </style>
 </head>
 <body>
   <div class="container">
-    <h1><%= htmlWebpackPlugin.options.title %></h1>
+    <h1 class="title"><%= htmlWebpackPlugin.options.title %></h1>
     <div class="field-group">
       <label for="user-input" class="user-name-label">Name</label>
-      <input id="user-input" type="text"class="user-input">
+      <input id="user-input" type="text"class="user-input" placeholder="user's name">
     </div>
     <div class="field-group">
       <label for="user-description" class="user-description-label">Description</label>
-      <textarea id="user-description" cols="30" rows="10" class="user-description"></textarea>
+      <textarea id="user-description" cols="30" rows="10" class="user-description" placeholder="user's description"></textarea>
     </div>
-    <button id="user-button" class="user-button">Add user</button>
+    <button id="user-button" class="btn user-button">Add user</button>
     <div id="inject-user-list"></div>
   </div>
 </body>

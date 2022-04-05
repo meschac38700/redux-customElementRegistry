@@ -37,7 +37,6 @@ export default class UserItem extends HTMLElement{
       }
       .user-item{
         position: relative;
-        background-color: #fefefe;
         color: rgb(16, 82, 136);
         text-transform: uppercase;
       }
