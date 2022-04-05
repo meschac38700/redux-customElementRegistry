@@ -19,4 +19,7 @@ function reducer (state=userState, action) {
   }
 }
 const userAndGlobalReducers = combineReducers({user:reducer, lastAction: globalReducer}) ;
-export default createStore(userAndGlobalReducers);
+export default createStore(
+  userAndGlobalReducers,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
