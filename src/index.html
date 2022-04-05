@@ -55,20 +55,11 @@
     .user-button:hover{
       background-color: rgb(25, 73, 73);
     }
-    .user-list{
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
-      gap: 1em;
-      padding: 1em 0;
-      margin: 0;
-    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Redux / CustomElementRegistry</h1>
+    <h1><%= htmlWebpackPlugin.options.title %></h1>
     <div class="field-group">
       <label for="user-input" class="user-name-label">Name</label>
       <input id="user-input" type="text"class="user-input">
