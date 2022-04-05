@@ -28,11 +28,12 @@ export default class UserDetails extends HTMLElement {
         bottom: 0;
         transform: translateY(100%);
         z-index: 9;
-        color: #4a4a4a;
-        background-color: #f2f3f7;
+        color: #ccc;
+        background-color: #03080d;
         padding: .8em;
         border-radius: .4em;
-        box-shadow: 0 4px 8px #dddcdc;
+        border: 1px solid #081724;
+        box-shadow: 0 4px 8px #081724;
         text-transform: none;
         display: flex;
         flex-direction: column;
