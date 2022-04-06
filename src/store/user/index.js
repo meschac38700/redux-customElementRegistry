@@ -4,10 +4,6 @@ import userState from "store/user/state";
 import Mutations from "store/user/mutations";
 import ActionTypes from "store/user/actionTypes";
 
-function lastAction(state = null, action) {
-  return action;
-}
-
 function reducer (state=userState, action) {
   switch (action.type) {
     case ActionTypes.ADD_USER:
