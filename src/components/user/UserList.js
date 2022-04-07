@@ -1,6 +1,6 @@
 import UserItem from "components/user/UserItem";
 
-export default class UserList extends HTMLElement{
+export default class usersList extends HTMLElement{
 
   static get observedAttributes() {
     return ['users'];
@@ -14,18 +14,22 @@ export default class UserList extends HTMLElement{
   constructor(users){
     super();
     this.attachShadow({mode: "open"});
-    this.users = users ?? this.getAttribute("users") ?? [];
-    this.users = this._parseUsers;
-    this.userList = document.createElement("DIV");
-    this.userList.setAttribute("class", "user-list");
+    this.users = this._parseUsers(users ?? this.getAttribute("users") ?? []);
+    this.usersList = document.createElement("DIV");
+    this.usersList.setAttribute("class", "user-list");
   }
 
-  get _parseUsers(){
+  /**
+   * parse users list
+   * @param {Array | String} users 
+   * @returns 
+   */
+  _parseUsers(users){
     try{
-      if(Array.isArray(this.users)) 
-        return this.users;
+      if(Array.isArray(users)) 
+        return users;
 
-      const data = JSON.parse(this.users);
+      const data = JSON.parse(users);
       if(Array.isArray(data)){
         return data;
       }
@@ -70,41 +74,40 @@ export default class UserList extends HTMLElement{
     this.render();
   }
 
+  /**
+   * append some new users
+   * @param  {...any} users new users to add
+   */
+  push(...users){
+    // filter already exists
+    const alreadyExist = this.users.map(user => user.id);
+    const newUsers = users.filter(user => !alreadyExist.includes(user.id));
+    this.users = [...this.users, ...newUsers];
+    this._updateRendering(newUsers)
+  }
 
   /**
-   * Append a single user
-   * @param {Object} pUser to append in the current list
+   * Update DOM users list
+   * @param {Array} newUsers new users to append to the DOM
    */
-  appendUser(pUser){
-    const alreadyExists = this._parseUsers.some(user => user.id === pUser.id)
-    if(alreadyExists){
-      throw new Error(`User already exists: ${JSON.stringify(pUser)}`)
-    }
-    this.userList.appendChild(new UserItem(pUser));
-    this.users = [...this.users, pUser];
-  }
-  /**
-   * append multiple users
-   * @param {Array} users list of user to append in the current list
-   */
-  appendUsers(users){
-    const currentUserIDs = this._parseUsers.map(user => user.id);
-    const newUsers = users.filter(user=> !currentUserIDs.includes(user.id) )
-    newUsers?.forEach(user => this.appendUser(user));
+  _updateRendering(newUsers){
+    newUsers.forEach(newUser => 
+      this.usersList.appendChild(new UserItem(newUser))
+    );
   }
 
   /**
    * Render the current customElement into DOM
    */
   render(){
-    this.userList.setAttribute("id", `user-list`);
-    this.userList.append(
+    this.usersList.setAttribute("id", `user-list`);
+    this.usersList.append(
       ...this.users.map(user => (new UserItem(user)))
     );
     this.shadowRoot.appendChild(this._styles);
-    this.shadowRoot.appendChild(this.userList);
+    this.shadowRoot.appendChild(this.usersList);
   }
 
 }
 
-customElements.define("user-list", UserList);
+customElements.define("user-list", usersList);

@@ -13,7 +13,6 @@ export default class UserDetails extends HTMLElement {
 
   get _styles(){
     const style = document.createElement("STYLE");
-    const currentClass = this.getAttribute("class");
     style.textContent = `
       *{
         margin: 0;
