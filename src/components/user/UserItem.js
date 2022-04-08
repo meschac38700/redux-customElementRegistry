@@ -20,28 +20,6 @@ export default class UserItem extends HTMLElement{
     this.showDetails = false;
     this.details = new UserDetails(this.user);
     this.details.classList.add(this.key);
-    this.link = this._createLink();
-  }
-
-  get _styles(){
-    const style = document.createElement("style");
-    style.textContent = `
-      *{
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      a{
-        color: inherit;
-        text-decoration: none;
-      }
-      .user-item{
-        position: relative;
-        color: rgb(227, 134, 14);
-        text-transform: uppercase;
-      }
-    `;
-    return style;
   }
 
   connectedCallback(){
@@ -72,20 +50,6 @@ export default class UserItem extends HTMLElement{
   }
 
   /**
-   * Render the current customElement into DOM
-   */
-  render(){
-    const div = document.createElement("div");
-    const classes = ["user-item" /*, this.showDetails? "details-opened": ""*/];
-    div.setAttribute("class", classes.join(" "));
-    div.setAttribute("id", `user-${this.user.id}`);
-    div.appendChild(this.link);
-    this.shadowRoot.appendChild(this._styles);
-    this.shadowRoot.appendChild(div);
-    this._addDetails();
-  }
-
-  /**
    * user details infos
    */
   _addDetails(){
@@ -97,10 +61,30 @@ export default class UserItem extends HTMLElement{
     }
   }
 
+  _addStyles(){
+    const style = document.createElement("style");
+    style.textContent = `
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .user-link {
+        color: rgb(227, 134, 14);
+        text-decoration: none;
+      }
+      user-item:defined {
+        color: rgb(227, 134, 14);
+        text-transform: uppercase;
+      }
+    `;
+    this.shadowRoot.appendChild(style);
+  }
+
   /**
    * Create anchor that wrap user name
    */
-  _createLink(){
+  _addUserLinkName(){
     const link = document.createElement("A");
     
     link.setAttribute("href", "#");
@@ -111,12 +95,20 @@ export default class UserItem extends HTMLElement{
       this.showDetails = !this.showDetails;
       this._addDetails();
     });
-    link.onblur = () => {
-      this.showDetails = false;
-      this._addDetails();
-    };
     link.innerText = this.user.name;
-    return link;
+    this.shadowRoot.appendChild(link);
+  }
+
+  /**
+   * Render the current customElement into DOM
+   */
+   render(){
+    const classes = ["user-item" /*, this.showDetails? "details-opened": ""*/];
+    this.setAttribute("class", classes.join(" "));
+    this.setAttribute("id", `user-${this.user.id}`);
+    this._addUserLinkName();
+    this._addStyles();
+    this._addDetails();
   }
 
 }

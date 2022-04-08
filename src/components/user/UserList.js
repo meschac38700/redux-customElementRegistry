@@ -15,49 +15,13 @@ export default class usersList extends HTMLElement{
     super();
     this.attachShadow({mode: "open"});
     this.users = this._parseUsers(users ?? this.getAttribute("users") ?? []);
-    this.usersList = document.createElement("DIV");
-    this.usersList.setAttribute("class", "user-list");
+    // this.usersList = document.createElement("DIV");
+    // this.usersList.setAttribute("class", "user-list");
   }
 
-  /**
-   * parse users list
-   * @param {Array | String} users 
-   * @returns 
-   */
-  _parseUsers(users){
-    try{
-      if(Array.isArray(users)) 
-        return users;
 
-      const data = JSON.parse(users);
-      if(Array.isArray(data)){
-        return data;
-      }
-      throw new SyntaxError("Error while parsing users list: 'users' attributes must be a list");
-    }catch(e){
-      console.error(e.message)
-    }
-    return [];
-  }
-
-  get _styles(){
-    const style = document.createElement("style");
-    style.textContent = `
-      *{
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      .user-list{
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        gap: .4em;
-        padding: 1em 0;
-        margin: 0;
-      }
-    `;
-    return style;
+  get usersList(){
+    return this.shadowRoot;
   }
 
   connectedCallback(){
@@ -87,6 +51,47 @@ export default class usersList extends HTMLElement{
   }
 
   /**
+ * parse users list
+ * @param {Array | String} users 
+ * @returns 
+ */
+    _parseUsers(users){
+    try{
+      if(Array.isArray(users)) 
+        return users;
+
+      const data = JSON.parse(users);
+      if(Array.isArray(data)){
+        return data;
+      }
+      throw new SyntaxError("Error while parsing users list: 'users' attributes must be a list");
+    }catch(e){
+      console.error(e.message)
+    }
+    return [];
+  }
+
+  _addStyles(){
+    const style = document.createElement("style");
+    style.textContent = `
+      *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      user-list:defined{
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: .4em;
+        padding: 1em 0;
+        margin: 0;
+      }
+    `;
+    this.appendChild(style);
+  }
+
+  /**
    * Update DOM users list
    * @param {Array} newUsers new users to append to the DOM
    */
@@ -100,12 +105,12 @@ export default class usersList extends HTMLElement{
    * Render the current customElement into DOM
    */
   render(){
-    this.usersList.setAttribute("id", `user-list`);
+    this.setAttribute("id", `user-list`);
+    this.setAttribute("class", "user-list");
+    this._addStyles();
     this.usersList.append(
       ...this.users.map(user => (new UserItem(user)))
     );
-    this.shadowRoot.appendChild(this._styles);
-    this.shadowRoot.appendChild(this.usersList);
   }
 
 }
