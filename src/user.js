@@ -1,25 +1,13 @@
-import UserActions from "store/user/actions";
-import userStore from "store/user";
 import UserActionTypes from "store/user/actionTypes";
+import { subscribeUserStore } from "store/user";
 import UserList from "components/user/UserList";
+import UserActions from "store/user/actions";
 
-const userInput = document.getElementById("user-input");
-const userDescription = document.getElementById("user-description");
-const submitButton = document.getElementById("user-button");
 const userList = new UserList();
 
-submitButton.addEventListener("click", () => {
-  const name = userInput.value.trim();
-  const description = userDescription.value.trim();
-  if(!!name.length && !!description.length){
-    UserActions.create({name, description});
-  }
-});
 
-userStore.subscribe(() => {
-  const users = userStore.getState().user.users;
-  const lastAction = userStore.getState().lastAction;
-
+subscribeUserStore(({lastAction, state}) => {
+  const users = state.users;
   if(lastAction === UserActionTypes.ADD_USER && users.length){
     userList.push(...users);
   }

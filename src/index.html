@@ -4,21 +4,21 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <title>Redux</title>
 </head>
 <body>
-  <div class="container">
-    <h1 class="title"><%= htmlWebpackPlugin.options.title %></h1>
-    <div class="field-group">
-      <label for="user-input" class="user-name-label">Name</label>
-      <input id="user-input" type="text"class="user-input" placeholder="user's name">
+  <div class="main">
+    <div class="container">
+      <h1 class="title"><%= htmlWebpackPlugin.options.title %></h1>
+
+      <div id="app"></div>
+    
+    
+      <div id="inject-user-list"></div>
+    
     </div>
-    <div class="field-group">
-      <label for="user-description" class="user-description-label">Description</label>
-      <textarea id="user-description" cols="30" rows="10" class="user-description" placeholder="user's description"></textarea>
-    </div>
-    <button id="user-button" class="btn user-button">Add user</button>
-    <div id="inject-user-list"></div>
   </div>
+
 </body>
 </html>
