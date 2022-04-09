@@ -113,8 +113,11 @@ export default class InputField extends HTMLElement {
     style.textContent = this.__styles
     this.shadowRoot.appendChild(style);
   }
-
-  resetValue({newValue=""}={}){
+  /**
+   * Update field value
+   * @param {Any} param0 new input values
+   */
+  setValue({newValue=""}={}){
     this.value = newValue;
     this.input.value = this.value;
   }

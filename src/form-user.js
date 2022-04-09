@@ -29,7 +29,7 @@ addUserButton.addEventListener("submit", (e) => {
   const newUser = userStore.getState().user.newUser;
   if(!!newUser.name.length && !!newUser.description.length){
     UserActions.create(newUser);
-    fields.forEach(field => field.resetValue());
+    fields.forEach(field => field.setValue());
   }
   
 })
