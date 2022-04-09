@@ -1,7 +1,8 @@
 export default class InputField extends HTMLElement {
 
-  name = "";
-  value = null;
+  #name = "";
+  #value = null;
+  #observer = null;
   #type = "text";
   #id = null;
   #label = null;
@@ -22,6 +23,7 @@ export default class InputField extends HTMLElement {
     super();
 
     this.attachShadow({mode: "open"});
+    this._initObserver();
 
     this.name = name ?? this.getAttribute("name");
     this.type = type ?? this.getAttribute("type");
@@ -35,16 +37,6 @@ export default class InputField extends HTMLElement {
 
     this.input = document.createElement("INPUT");
     this.input.type = this.type;
-  }
-
-  _onValueChange(){
-    // todo
-    switch(this.type){
-      case "text":
-        if(typeof this.value === this.type){
-          // todo
-        }
-    }
   }
 
   _addInput(){
@@ -70,6 +62,14 @@ export default class InputField extends HTMLElement {
     label.setAttribute("class", "field-label");
     label.innerText = this.label;
     this.wrapper.appendChild(label);
+  }
+
+  get getValue(){
+    return this.value;
+  }
+
+  get instance(){
+    return this.observer;
   }
 
   get __styles(){
@@ -113,13 +113,35 @@ export default class InputField extends HTMLElement {
     style.textContent = this.__styles
     this.shadowRoot.appendChild(style);
   }
+
+  _initObserver(){
+    this.observer = new Proxy(this,{
+      set(self, key, value ){
+        if(self.hasOwnProperty(key)){
+          self[key] = value;
+          if(key === "value"){
+            self.input.value = value;
+          }
+        }
+        return true;
+      },
+      get(self, key){
+        if(self.hasOwnProperty(key))
+          return self[key];
+        return null;
+      }
+    });
+  }
+
   /**
    * Update field value
-   * @param {Any} param0 new input values
+   * @param {Any} param0 new input value
+   * @param {Function} callback function to execute after change
    */
-  setValue({newValue=""}={}){
-    this.value = newValue;
-    this.input.value = this.value;
+  setValue(newValue="", callback=({name, value}) => ({name, value})){
+    this.observer.value = newValue;
+    // inject the current field name and the value
+    callback({name: this.name, value: newValue});
   }
 
   /**
@@ -129,7 +151,6 @@ export default class InputField extends HTMLElement {
    * @param {string} newValue 
    */
    attributeChangedCallback(name, oldValue, newValue) {
-    console.log("attr changed =>", name, oldValue, newValue);
     const field = this.wrapper.querySelector(".field-input");
     if(name === "value" && oldValue !== newValue && !!field){
       this.wrapper.querySelector(".field-input").value = newValue
