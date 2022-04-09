@@ -91,7 +91,7 @@ export default class InputField extends HTMLElement {
         width: 100%;
         max-width: 100%;
         padding: 0;
-        margin: 0;
+        margin: 0 0 1rem 0;
         color: #ccc;
       }
       .field-input{
