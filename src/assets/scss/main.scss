@@ -1,11 +1,13 @@
-*, *:before, *:after {
+*, *:before, *:after{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+html, body {
   color: #ccc;
   font-size: 14px;
 }
-body, html{
+.main{
   min-height: 100vh;
   overflow: hidden;
   display: flex;
@@ -13,8 +15,7 @@ body, html{
   justify-content: center;
   background: #1b344f;
 }
-.container,
-.field-group {
+.container {
   width: 700px;
   max-width: calc(100% - 2rem);
   margin: 1rem auto;
@@ -33,42 +34,6 @@ body, html{
   margin-bottom: 1rem;
   text-align: center;
 }
-.field-group {
-  gap: .2rem;
-  width: 100%;
-  max-width: 100%;
-  padding: 0;
-  margin: 0;
 
-  .label {
-    font-weight: 600px;
-  }
 
-  .user-description,
-  .user-input,
-  .user-button {
-    padding: .6em .4rem;
-    outline: none;
-    border-radius: 0.2em;
-    background: #03080d;
-    border: 1px solid #081724;
-  }
-  .user-description{
-    resize: vertical;
-    min-height: 200px;
-  }
-}
-.btn {
-  background-color: rgb(46, 138, 138);
-  color: white;
-  font-weight: 600;
-  align-self: center;
-  padding: .6rem 2rem;
-  border: none;
-  border-radius: .4em;
-  cursor: pointer;
-  transition: background-color .3s ease-in-out;
-  &:hover{
-    background-color: rgb(25, 73, 73);
-  }
-}
+
