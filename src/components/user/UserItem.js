@@ -15,11 +15,10 @@ export default class UserItem extends HTMLElement{
     super();
     this.attachShadow({mode: "open"});
 
-    this.key = `${user.name}-${user.id}-${new Date().getTime()}`;
+    this.key = `${user.name.replaceAll(/\s+/g, "-").toLowerCase()}-${new Date().getTime()}`;
     this.user = {...user};
     this.showDetails = false;
     this.details = new UserDetails(this.user);
-    this.details.classList.add(this.key);
   }
 
   connectedCallback(){
@@ -81,6 +80,11 @@ export default class UserItem extends HTMLElement{
     this.shadowRoot.appendChild(style);
   }
 
+
+  _addActionButtons(){
+    // TODO delete, edit
+  }
+
   /**
    * Create anchor that wrap user name
    */
@@ -105,10 +109,9 @@ export default class UserItem extends HTMLElement{
    render(){
     const classes = ["user-item" /*, this.showDetails? "details-opened": ""*/];
     this.setAttribute("class", classes.join(" "));
-    this.setAttribute("id", `user-${this.user.id}`);
     this._addUserLinkName();
-    this._addStyles();
     this._addDetails();
+    this._addStyles();
   }
 
 }

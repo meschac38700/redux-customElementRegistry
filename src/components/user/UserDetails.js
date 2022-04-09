@@ -64,15 +64,12 @@ export default class UserDetails extends HTMLElement {
   render(){
     const wrapper = document.createElement("DIV");
     wrapper.setAttribute("class", "details-wrapper");
-    wrapper.setAttribute("id", "details-wrapper");
     const div = document.createElement("DIV");
     const title = document.createElement("H4");
     title.setAttribute("class", "title user-name");
-    title.setAttribute("id", `${this.user.id}-${this.user.name}-title`);
     title.innerText = `What's about ${this.user.name}`;
     const description = document.createElement("P");
     title.setAttribute("class", "description");
-    description.setAttribute("id", `${this.user.id}-${this.user.name}-description`);
     description.innerText = this.user.description;
 
     div.setAttribute("class", "user-details");
