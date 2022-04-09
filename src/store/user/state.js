@@ -1,3 +1,4 @@
-export default {
-  users: []
-};
+export default new Proxy({
+  users: [],
+  newUser: {}
+},{});
