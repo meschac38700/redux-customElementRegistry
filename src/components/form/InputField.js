@@ -68,7 +68,7 @@ export default class InputField extends HTMLElement {
     return this.value;
   }
 
-  get instance(){
+  get observerInstance(){
     return this.observer;
   }
 
