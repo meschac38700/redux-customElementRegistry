@@ -98,6 +98,15 @@ export default class UserPanel extends HTMLElement{
     this.panel.appendChild(closeWrapper);
   }
 
+
+  /**
+   * append element in the content
+   * @param {HTMLElement} element 
+   */
+  addElement(element){
+    this.panelContent.appendChild(element);
+  }
+
   /**
    * 
    * @param {Array} users to append in the panel
@@ -111,6 +120,13 @@ export default class UserPanel extends HTMLElement{
       this.panelContent.appendChild(new UserItem(user));
     })
 
+  }
+
+  /**
+   * @param {NotificationElement} notification
+   */
+  addNotification(notification){
+    this.panelContent.appendChild(notification);
   }
 
   connectedCallback(){
