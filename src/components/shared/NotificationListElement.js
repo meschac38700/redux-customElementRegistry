@@ -16,7 +16,6 @@ export default class NotificationListElement extends HTMLElement {
     this.notificationsDOM = [];
     this.container = document.createElement("DIV");
     this.container.setAttribute("class", "container");
-    // this.__setNotifications(notifications);
     this.__initNotificationObserver();
   }
 
@@ -38,15 +37,23 @@ export default class NotificationListElement extends HTMLElement {
         adding: .8em;
         display: flex;
         flex-direction: column;
+        align-items: flex-start;
         gap: 1em 0;
-        height: 400px;
+      }
+      notification-element{
+        opacity: 1;
+        transition: opacity .5s ease-in-out;
+      }
+      .removing{
+        opacity: 0;
       }
     `;
     this.appendChild(style);
   }
 
-  __initNotificationObserver(){
-    this.notificationObserver = new Proxy(this.getNotifications, {
+  __initNotificationObserver(data=null){
+    this.notifications = data??[];
+    this.notificationObserver = new Proxy(this.notifications, {
       /**
        * 
        * @param {NotificationListElement} self 
@@ -80,7 +87,6 @@ export default class NotificationListElement extends HTMLElement {
     }
   }
 
-
   /**
    * append many notifications
    * @param {Array<Notification>} notificationList list of Notification instances
@@ -89,17 +95,18 @@ export default class NotificationListElement extends HTMLElement {
     const currentNotificationIDs = this.notifications.map(notif => notif.id);
     const newNotifications = notificationList.filter(notif => !currentNotificationIDs.includes(notif.id));
     newNotifications.forEach(notif => this.appendNotification(notif));
+
   }
 
   removeNotifications(notificationsList){
-    const keepedNotifIDs = notificationsList.map(notif => notif.id);
+    const notificationIDsToKeep = notificationsList.map(notif => notif.id);
     this.notificationsDOM.forEach(notif => {
-      if(!keepedNotifIDs.includes(notif.getID)){
-        notif.remove();
+      if(!notificationIDsToKeep.includes(notif.getID)){
+        notif.smoothRemove(500);
       }
     });
 
-    this.notificationObserver = [...notificationsList]
+    this.__initNotificationObserver([...notificationsList]);
   }
 
   connectedCallback(){

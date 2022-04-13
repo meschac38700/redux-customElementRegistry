@@ -4,18 +4,13 @@ export default class NotificationElement extends HTMLElement {
     return ['title', 'message'];
   }
 
-  #identifier = null;
+  #notification = null
   #observer = null;
-  #title = null;
-  #message = null;
 
-  constructor({title=null, message=null, id=null}){
+  constructor(notification){
     super();
     this.attachShadow({mode:"open"});
-
-    this.identifier = id;
-    this.title = title ?? this.getAttribute("title")?? "";
-    this.message = message ?? this.getAttribute("message")?? "";
+    this.notification = notification;
   }
 
 
@@ -24,21 +19,7 @@ export default class NotificationElement extends HTMLElement {
   }
 
   get getID(){
-    return this.identifier;
-  }
-
-  _initObserver(){
-    this.observer = new Proxy(this, { 
-      set(self, key, value){
-        if(NotificationElement.observedAttributes.includes(key)){
-          self[key] = value;
-          // TODO update dom
-        }
-      },
-      get(self, prop){
-        return self[prop];
-      }
-    });
+    return this.notification.id;
   }
 
   _addStyles(){
@@ -84,7 +65,9 @@ export default class NotificationElement extends HTMLElement {
     const notification = document.createElement("DIV");
     notification.setAttribute("class", "notification-wrapper");
     notification.setAttribute("id", new Date().getTime());
-    notification.appendChild(this.notificationHeader);
+    if(this.notification.title?.length){
+      notification.appendChild(this.notificationHeader);
+    }
     notification.appendChild(this.notificationBody);
     this.shadowRoot.appendChild(notification)
   }
@@ -92,7 +75,7 @@ export default class NotificationElement extends HTMLElement {
   get notificationHeader(){
     const title = document.createElement("h4");
     title.setAttribute("class", "notification-title");
-    title.innerText = this.title;
+    title.innerText = this.notification.title;
 
     return title;
   }
@@ -100,7 +83,7 @@ export default class NotificationElement extends HTMLElement {
   get notificationBody(){
     const message = document.createElement("DIV");
     message.setAttribute("class", "notification-message");
-    message.innerText = this.message;
+    message.innerHTML = this.notification.message;
 
     return message;
   }
@@ -116,9 +99,15 @@ export default class NotificationElement extends HTMLElement {
       //TODO this.
   }
 
-  disconnectedCallback(){
-    this.textContent = "";
-    this.remove();
+  /**
+   * remove current element from DOM with animation
+   * @param {number} duration of animation in milliseconds
+   */
+   smoothRemove(duration=500){
+    this.classList.add("removing");
+    window.setTimeout( () => {
+      this.remove();
+    }, duration);
   }
 
   connectedCallback(){
