@@ -67,6 +67,7 @@ export default class UserPanel extends HTMLElement{
         color: #d98383;
         cursor: pointer;
         transform: translateX(calc(100% + .8em));
+        transition: transform 1s ease-in-out;
         flex: none;
       }
       .user-panel.opened .close-btn{

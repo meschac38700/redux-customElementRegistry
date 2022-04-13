@@ -1,6 +1,6 @@
 import {combineReducers, createStore} from "redux";
 import ActionTypes from "store/user/actionTypes";
-import globalReducer from "store/global/index";
+import globalReducer from "store/global";
 import Mutations from "store/user/mutations";
 import userState from "store/user/state";
 

@@ -7,6 +7,9 @@ export default class NotificationElement extends HTMLElement {
   #notification = null
   #observer = null;
 
+  /**
+   * @param {Notification} notification 
+   */
   constructor(notification){
     super();
     this.attachShadow({mode:"open"});
