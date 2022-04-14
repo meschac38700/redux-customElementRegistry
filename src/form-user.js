@@ -23,11 +23,8 @@ const fields = [
 ];
 const addUserButton = new SubmitField({label: "Add user"});
 addUserButton.addEventListener("submit", (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  console.log("clicked")
   const newUser = userStore.getState().user.newUser;
-  if(!!newUser.name.length && !!newUser.description.length){
+  if(!!newUser.name?.length && !!newUser.description?.length){
     UserActions.create(newUser);
     fields.forEach(field => field.setValue());
   }

@@ -16,6 +16,7 @@ export default class UserPanel extends HTMLElement{
 
     // TODO extract in private method
     this.users = users ? [...users] : JSON.parse(this.getAttribute("users")) ?? [];
+    this.overlay = document.createElement("DIV")
     this.panel = document.createElement("DIV");
     this.panel.classList.add("user-panel");
     this.panelContent = document.createElement("DIV");
@@ -26,21 +27,29 @@ export default class UserPanel extends HTMLElement{
   _addStyles(){
     const style = document.createElement("STYLE");
     style.textContent = `
-      .user-panel{
-        position: absolute;
-        width: 500px;
-        max-width: 80%;
-        height: 100%;
-        top: 0;
-        left: 0;
+      .panel-overlay{
+        position: fixed;
+        background: transparent;
+        inset: 0;
         transform: translateX(-100%);
-        background: #12285b;
+        display: flex;
         transition: transform .5s ease-in-out;
+      }
+      .panel-overlay.opened{
+        transform: translateX(0);
+      }
+      .user-panel{
+        width: min(50%, 80%);
+        height: 100%;
+        background: #12285b;
         display: flex;
         flex-direction: column;
+        transform: translateX(100%);
+        transition: transform .5s ease-in .1s;
       }
-      .user-panel.opened{
-        transform: translateX(0);
+      .opened .user-panel{
+        transform: translateX(0%);
+        transition: transform .5s ease-out 0s;
       }
       .user-panel__content{
         overflow-y: auto;
@@ -70,7 +79,7 @@ export default class UserPanel extends HTMLElement{
         transition: transform 1s ease-in-out;
         flex: none;
       }
-      .user-panel.opened .close-btn{
+      .opened .close-btn{
         color: #ccc;
         transform: rotate(180deg);
       }
@@ -93,10 +102,24 @@ export default class UserPanel extends HTMLElement{
     close.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      this.panel.classList.toggle("opened");
+      this.panel.parentElement.classList.toggle("opened");
     })
     closeWrapper.appendChild(close);
     this.panel.appendChild(closeWrapper);
+  }
+
+  _mount(){
+    this.overlay.addEventListener("click", (e)=>{
+      this.overlay.classList.toggle("opened");
+    });
+    this.panel.addEventListener("click", (e) =>{
+      e.preventDefault();
+      e.stopPropagation();
+    })
+    this.panel.appendChild(this.panelContent);
+    this.overlay.setAttribute("class", "panel-overlay");
+    this.overlay.appendChild(this.panel);
+    this.shadowRoot.appendChild(this. overlay);
   }
 
 
@@ -137,8 +160,8 @@ export default class UserPanel extends HTMLElement{
   render(){
     this._addStyles();
     this._addCloseButton();
-    this.panel.appendChild(this.panelContent);
-    this.shadowRoot.appendChild(this.panel);
+
+    this._mount();
   }
 
 }

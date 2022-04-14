@@ -39,9 +39,14 @@ export default class SubmitField extends HTMLElement {
   _emitSubmitEvent(){
     const submitEvent = new CustomEvent("submit");
     this.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       this.dispatchEvent(submitEvent);
-    })
-    this.button.addEventListener("click", () => {
+    });
+
+    this.button.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       this.dispatchEvent(submitEvent);
     })
   }
