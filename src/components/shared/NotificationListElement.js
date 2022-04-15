@@ -8,6 +8,7 @@ export default class NotificationListElement extends HTMLElement {
   #notifications = null;
   #notificationsDOM = null
   #notificationObserver = null;
+  #notificationDOMObserver = null;
 
   constructor(){
     super();
@@ -17,6 +18,7 @@ export default class NotificationListElement extends HTMLElement {
     this.container = document.createElement("DIV");
     this.container.setAttribute("class", "container");
     this.__initNotificationObserver();
+    this.__initNotificationDOMObserver();
   }
 
 
@@ -42,9 +44,10 @@ export default class NotificationListElement extends HTMLElement {
       }
       notification-element{
         opacity: 1;
-        transition: opacity .5s ease-in-out;
+        transition: opacity .3s ease-in-out, transform .5s ease-in-out;
       }
       .removing{
+        transform: translateX(-200%);
         opacity: 0;
       }
     `;
@@ -58,21 +61,41 @@ export default class NotificationListElement extends HTMLElement {
        * 
        * @param {NotificationListElement} self 
        * @param {number} index new index in the notifications list
-       * @param {Notification} value notification object
+       * @param {Notification} notification instance
        */
-      set: (self, index, value) => {
+      set: (self, index, notification) => {
         if(!isNaN(index)){
-          self[index] = value;
-          const newNotif = new NotificationElement(value);
-          this.notificationsDOM.push(newNotif); // TODO proxy
-          this.container.appendChild(newNotif);
+          self[index] = notification;
+          this.notificationDOMObserver.push(new NotificationElement(notification));
         }
         return true;
       },
-      get(self, attribute){
-        return self[attribute];
+      get(self, index){
+        return self[index];
       }
     })
+  }
+
+  __initNotificationDOMObserver(data=null){
+    this.notificationsDOM = data ?? [];
+    this.notificationDOMObserver = new Proxy(this.notificationsDOM, {
+      /**
+       * 
+       * @param {NotificationListElement} self 
+       * @param {number} index new index in the notifications list
+       * @param {NotificationElement} value
+       */
+      set: (self, index, notificationElement) => {
+        if(!isNaN(index)){
+          self[index] = notificationElement;
+          this.container.appendChild(notificationElement);
+        }
+        return true;
+      },
+      get: (self, index) => {
+        return self[index];
+      }
+    });
   }
 
   /**

@@ -143,7 +143,6 @@ export default class UserPanel extends HTMLElement{
     newUsers.forEach(user => {
       this.panelContent.appendChild(new UserItem(user));
     })
-
   }
 
   /**

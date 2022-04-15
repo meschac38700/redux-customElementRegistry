@@ -36,7 +36,7 @@ export default class NotificationElement extends HTMLElement {
       .notification-wrapper{
         --horiz-padding: .8em;
         --triangle-width: 15px;
-        --triangle-height: 10px;
+        --triangle-height: 30px;
         --bg-color: #5855b7;
         position: relative;
         display: flex;
@@ -57,7 +57,7 @@ export default class NotificationElement extends HTMLElement {
         border-bottom : var(--triangle-height) solid transparent;
         position: absolute;
         left: 0;
-        top: calc(50% - calc(var(--triangle-width) / 2));
+        top: calc(50% - var(--triangle-height));
         transform: translateX(calc(-50% - calc(var(--horiz-padding) / 2)));
       }
     `;

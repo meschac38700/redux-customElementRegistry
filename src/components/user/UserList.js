@@ -15,8 +15,6 @@ export default class usersList extends HTMLElement{
     super();
     this.attachShadow({mode: "open"});
     this.users = this._parseUsers(users ?? this.getAttribute("users") ?? []);
-    // this.usersList = document.createElement("DIV");
-    // this.usersList.setAttribute("class", "user-list");
   }
 
 
@@ -55,7 +53,7 @@ export default class usersList extends HTMLElement{
  * @param {Array | String} users 
  * @returns 
  */
-    _parseUsers(users){
+  _parseUsers(users){
     try{
       if(Array.isArray(users)) 
         return users;
