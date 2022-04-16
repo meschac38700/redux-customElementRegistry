@@ -7,7 +7,6 @@ export default class SubmitField extends HTMLElement {
 
   constructor({label=null}){
     super();
-    this.attachShadow({mode: "open"});
     this.label = label ?? this.getAttribute("label") ?? "";
     this.button = document.createElement("BUTTON");
     this.button.setAttribute("id", `button-${new Date().getTime()}`);
@@ -18,37 +17,61 @@ export default class SubmitField extends HTMLElement {
   _addStyles(){
     const style = document.createElement("STYLE");
     style.textContent = `
-      .submit-btn{
+      submit-field{
+        display: inline-block;
         background-color: rgb(46, 138, 138);
+        border-radius: .2em;
+      }
+      submit-field:hover{
+        background-color: rgb(36, 101, 101);
+      }
+      .submit-btn{
+        background-color: transparent;
         color: white;
         font-weight: 600;
         align-self: center;
         padding: .6rem 2rem;
-        border: none;
-        border-radius: .4em;
         cursor: pointer;
-        transition: background-color .3s ease-in-out;
+        border: none;
       }
-      button-field:hover{
-        background-color: rgb(25, 73, 73);
+      
+      .clicked{
+        background-color: #a8aaa9 !important;
       }
     `;
-    this.shadowRoot.appendChild(style);
+    this.appendChild(style);
   }
 
   _emitSubmitEvent(){
     const submitEvent = new CustomEvent("submit");
-    this.addEventListener("click", (e) => {
+    
+    this.addEventListener("mousedown", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      this.dispatchEvent(submitEvent);
+      this.classList.add("clicked");
     });
 
-    this.button.addEventListener("click", (e) => {
+    this.addEventListener("mouseup", (e) => {
       e.preventDefault();
       e.stopPropagation();
+      setTimeout(() => {
+        this.classList.remove("clicked");
+      }, 250);
       this.dispatchEvent(submitEvent);
-    })
+    });
+  }
+
+  __triggerEvent(node, eventName){
+    const clickEvent = new Event(eventName, {"bubbles":true, "cancelable":true});
+    node.dispatchEvent(clickEvent);
+  }
+
+  click(){
+    //--- Simulate a natural mouse-click sequence.
+    this.__triggerEvent (this, "mouseover");
+    this.__triggerEvent (this, "mousedown");
+    this.__triggerEvent (this, "mouseup");
+    this.__triggerEvent (this, "click");
   }
 
   /**
@@ -71,7 +94,7 @@ export default class SubmitField extends HTMLElement {
   render(){
     this._emitSubmitEvent();
     this._addStyles();
-    this.shadowRoot.appendChild(this.button);
+    this.appendChild(this.button);
   }
 }
 customElements.define("submit-field", SubmitField )
